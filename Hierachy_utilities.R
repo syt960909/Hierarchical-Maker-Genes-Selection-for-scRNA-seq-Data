@@ -228,7 +228,7 @@ BuildHierarchicalMap <- function(object)
 }
 
 
-PurpleAndYellow <- function(k = 5) {
+PurpleAndYellow <- function(k = 50) {
   return(CustomPalette(low = "magenta", high = "yellow", mid = "black", k = k))
 }
 
