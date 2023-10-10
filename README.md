@@ -9,6 +9,10 @@ To generate the compact heatmap based on the hierarchy, run Generate_compact_hea
 
 All the novel functions applied is included in Hierachy_utilities.R 
 
+Users can modify the number of marker genes selected to calculate the score(there are three places that need this parameter:function MergeClusters and BuildHierarchicalMap in Hierachy_utilities.R and after the FindAllMarkers function in pbmc_3k_hierarchy.R)
+
+For PBMC3k dataset, we use the top10 marker genes for each lineage to generate the hierarchy and for PBMC control/stimulate we use top50 in terms of the larger number of genes.
+
 ## SessionInfo():
 
 R version 4.2.1 (2022-06-23 ucrt)\
@@ -38,3 +42,27 @@ ttservice_0.3.8\
 SeuratObject_4.1.3\
 Seurat_4.3.0\
 dplyr_1.1.0
+
+
+===================================================================================================================================================
+# Evaluation
+The evaluation is implemented on Python Jupyter notebook(Evaluation.ipynb), including data loading/preprocessing, classification and UMAP visualization, with detailed instructions included.
+
+For the evaluation, we start from loading the raw data, which means the whole process is fully independent from the algorithm we construct the hierarchy implemented by R. This allows the users to customize their own way to process the data for evaluation in terms of different goals they want to achieve. 
+
+To do the evaluation:
+
+1. run pbmc_3k_hierarchy.R and get the hierarchy
+2. manually input the hierarchy and the corresponded marker genes for each lineage into the python notebook
+3. follow the instructions in the notebook and change the parameters to do the evaluation.
+
+### Python packages needed:
+
+scanpy~=1.7.2\
+scipy~=1.5.4\
+pandas~=1.1.5\
+numpy~=1.19.5\
+sklearn~=0.0.post1\
+scikit-learn~=0.24.1\
+ismember~=1.0.1\
+umap-learn~=0.5.1
