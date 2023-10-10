@@ -46,7 +46,7 @@ for(my_level_ele in my_levels){
 }
 
 over_lap<-list()
-for (i in seq_along(1:length(branch_list)-1)){
+for (i in seq_along(1:(length(branch_list)-1))){
   print(i)
   over_lap<-append(over_lap,as.numeric(length(intersect(branch_list[[1]],branch_list[[i+1]]))))
   
@@ -77,12 +77,15 @@ while (i<length(pbmc_3k_hie_list)){
   for (bar_code in colnames(pbmc@assays$RNA@counts)) {
     data_tmp[bar_code,]<-a$data[bar_code,]
   }
+  data_tmp[data_tmp>2.5]=2.5
+  data_tmp[data_tmp<(-2.5)]=(-2.5)
   p_tmp=Heatmap(t(as.matrix(data_tmp)), #name = paste0("mat_",as.character(i+1)), 
              column_order = cell_order, 
              row_order = rev(a$feature.order), 
              cluster_rows = FALSE,
              cluster_columns = FALSE,show_column_names = FALSE,col = PurpleAndYellow(),
-             use_raster = TRUE)
+             show_heatmap_legend = FALSE,
+             use_raster = FALSE)
   ht_list = ht_list %v% p_tmp
   for (level_ele in levels(pbmc_3k_hie_list[[i+1]])){
     if(length(str_split(level_ele,';')[[1]])==2){
@@ -98,12 +101,15 @@ while (i<length(pbmc_3k_hie_list)){
       for (bar_code in colnames(pbmc@assays$RNA@counts)) {
         data_tmp[bar_code,]<-a$data[bar_code,]
       }
+      data_tmp[data_tmp>2.5]=2.5
+      data_tmp[data_tmp<(-2.5)]=(-2.5)
       p_tmp=Heatmap(t(as.matrix(data_tmp)), 
                     column_order = cell_order, 
                     row_order = rev(a$feature.order), 
                     cluster_rows = FALSE,
                     cluster_columns = FALSE,show_column_names = FALSE,col = PurpleAndYellow(),
-                    use_raster = TRUE)
+                    show_heatmap_legend = FALSE,
+                    use_raster = FALSE)
       ht_list = ht_list %v% p_tmp
     }
   }
