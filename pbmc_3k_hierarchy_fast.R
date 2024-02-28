@@ -1,6 +1,7 @@
 library(dplyr)
 library(Seurat)
 library(tidyseurat)
+library(stringr)
 source('Hierachy_utilities.R') ###Contains the functions for building hierarchy
 
 #####################################################################################################
@@ -53,4 +54,65 @@ data_<-GetHeatmapMatrix(pbmc,features = top10$gene)
 ###Get a initial heatmap score corresponding to a flat data structure
 score<-HeatmapScore(pbmc,data_,top10,levels(pbmc))
 pbmc$best_score<-score
-pbmc_3k_hie_list_fast<-BuildHierarchicalMap_predefine(pbmc)
+pbmc_3k_hie_list<-BuildHierarchicalMap_predefine(pbmc)
+
+
+
+
+
+
+
+#####################################################################################################
+###Save results
+###save hierarchical structure and marker genes corresponding to each hierarchical level as output files
+
+###Hierarchical structure
+hierarchy_list = list()
+i = 2
+while(i <= length(pbmc_3k_hie_list)){
+  tmp_list = matrix(nrow = 0,ncol = length(levels(pbmc_3k_hie_list[[i]])))
+  for(j in seq_along(levels(pbmc_3k_hie_list[[i]]))){
+    print(j)
+    tmp_list[j] = levels(pbmc_3k_hie_list[[i]])[j]
+  }
+  print(tmp_list)
+  hierarchy_list = c(hierarchy_list,list(tmp_list))
+  i = i + 1
+}
+
+hierarchy_gene_list = hierarchy_list
+i = 2
+while(i <= length(pbmc_3k_hie_list)){
+  PBMC.markers <- FindAllMarkers(pbmc_3k_hie_list[[i]], only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
+  top10 <- PBMC.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_log2FC)
+  for(j in seq_along(hierarchy_list[[i-1]])){
+    hierarchy_gene_list[[i-1]][[j]] = paste(top10$gene[top10$cluster==levels(pbmc_3k_hie_list[[i]])[[j]]],collapse = ";")
+  }
+  i = i+1
+}
+
+for(i in seq_along(hierarchy_list)){
+  for(j in seq_along(hierarchy_list[[i]])){
+    if(length(str_split_1(hierarchy_list[[i]][[j]],";"))==2){
+      hierarchy_list = c(hierarchy_list,str_split(hierarchy_list[[i]][[j]],";"))
+      hierarchy_gene_list = c(hierarchy_gene_list,str_split(hierarchy_list[[i]][[j]],";"))
+      PBMC_sub <- subset(x = pbmc, idents = str_split_1(hierarchy_list[[i]][[j]],";"))
+      all.genes <- rownames(PBMC_sub)
+      PBMC_sub <- ScaleData(PBMC_sub, features = all.genes)
+      PBMC.markers <- FindAllMarkers(PBMC_sub, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
+      top10 <- PBMC.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_log2FC)
+      
+      hierarchy_gene_list[[length(hierarchy_gene_list)]][[1]]=paste(top10$gene[top10$cluster==levels(PBMC_sub)[[1]]],collapse = ";")
+      hierarchy_gene_list[[length(hierarchy_gene_list)]][[2]]=paste(top10$gene[top10$cluster==levels(PBMC_sub)[[2]]],collapse = ";")
+      
+      
+    }
+  }
+}
+
+
+write.table(as.data.frame(hierarchy_list),file="C:\\Users\\ysun465\\Documents\\Hierarchical-Maker-Genes-Selection-for-scRNA-seq-Data\\hierarchy_list.csv", quote=F,sep=",",row.names=F,col.names = F)
+write.table(as.data.frame(hierarchy_gene_list),file="C:\\Users\\ysun465\\Documents\\Hierarchical-Maker-Genes-Selection-for-scRNA-seq-Data\\hierarchy_gene_list.csv", quote=F,sep=",",row.names=F,col.names = F)
+
+  
+
