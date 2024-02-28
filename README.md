@@ -52,9 +52,9 @@ For the evaluation, we start from loading the raw data, which means the whole pr
 
 To do the evaluation:
 
-1. run pbmc_3k_hierarchy.R and get the hierarchy
-2. manually input the hierarchy and the corresponded marker genes for each lineage into the python notebook
-3. follow the instructions in the notebook and change the parameters to do the evaluation.
+1. run pbmc_3k_hierarchy.R and get the hierarchy(the hierarchy structure and corresponding marker genes are saved as .csv files)
+2. Open the Evaluation.ipynb and load the gene expression data, hierarchy structure and corresponding marker genes files we get from step 1(One can also manually input the hierarchy and the corresponded marker genes for each lineage into the python notebook, example codes are included)
+4. follow the instructions in the notebook and change the parameters to do the evaluation.
 
 ### Python packages needed:
 
