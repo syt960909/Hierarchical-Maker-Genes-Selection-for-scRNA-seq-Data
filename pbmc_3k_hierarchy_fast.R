@@ -110,9 +110,9 @@ for(i in seq_along(hierarchy_list)){
   }
 }
 
-
-write.table(as.data.frame(hierarchy_list),file="C:\\Users\\ysun465\\Documents\\Hierarchical-Maker-Genes-Selection-for-scRNA-seq-Data\\hierarchy_list.csv", quote=F,sep=",",row.names=F,col.names = F)
-write.table(as.data.frame(hierarchy_gene_list),file="C:\\Users\\ysun465\\Documents\\Hierarchical-Maker-Genes-Selection-for-scRNA-seq-Data\\hierarchy_gene_list.csv", quote=F,sep=",",row.names=F,col.names = F)
+###Please Modify the path to save the results
+write.table(as.data.frame(hierarchy_list),file="your_own_path\\hierarchy_list.csv", quote=F,sep=",",row.names=F,col.names = F)
+write.table(as.data.frame(hierarchy_gene_list),file="your_own_path\\hierarchy_gene_list.csv", quote=F,sep=",",row.names=F,col.names = F)
 
   
 
