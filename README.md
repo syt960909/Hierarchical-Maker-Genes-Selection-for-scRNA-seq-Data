@@ -44,6 +44,7 @@ Seurat_4.3.0\
 dplyr_1.1.0
 
 Our algorithm are also compatible with the latest version Seurat v5. Users can choose to load Seurat v5 while taking care of the version of other dependencies for the following visualization and analysis. 
+
 ===================================================================================================================================================
 # Evaluation
 The evaluation is implemented on Python Jupyter notebook(Evaluation.ipynb), including data loading/preprocessing, classification and UMAP visualization, with detailed instructions included.
