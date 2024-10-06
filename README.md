@@ -7,6 +7,13 @@ To construct the hierarchy in our proposed method, run pbmc_3k_hierarchy.R
 
 To generate the compact heatmap based on the hierarchy, run Generate_compact_heatmap.R(This file should be run after constructing the hierarchy, which means it should be run after running pbmc_3k_hierarchy.R or with an predefined hierarchy organized in a proper data structure)
 
+### Notes:
+we provided an alternative faster implementation with predefined hierarchical lineages(pbmc_3k_hierarchy_fast.R). In datasets where the number of clusters or cell types is small, users can choose the original implementation. In cases where there are many cell types, users can choose the faster implementation.
+
+In this alternative faster implementation, the predefined hierarchical lineage tree is computed by BuildClusterTree() function in Seurat. Given a dataset with cell clusters defined, we calculate the average expression of cells from each cell cluster and build a hierarchical tree based on a distance matrix constructed in PCA space. Through the BuildClusterTree(), we can get a vector called "height", which is a set of n-1 real values (non-decreasing for ultrametric trees). The clustering height is the value of the criterion associated with the clustering method for the agglomeration. From bottom to top, we set each height value as threshold to cut the tree into groups so that we get a predefined hierarchical lineage without doing Wilcoxon test for all possible combinations. We calculate the heatmap score corresponding to lineages for each level. When the score is not getting higher, we stop the process and finish our first split. For each lineage we obtain after the first split, we repeatedly build the hierarchical tree, calculate the heatmap score and decide the fine-grained lineages within that lineage as if the data corresponding to this lineage is a new dataset. We iterate this process until a point where all the leaf nodes only contain one individual cell cluster.
+
+
+
 All the novel functions applied is included in Hierachy_utilities.R 
 
 Users can modify the number of marker genes selected to calculate the score(there are three places that need this parameter:function MergeClusters and BuildHierarchicalMap in Hierachy_utilities.R and after the FindAllMarkers function in pbmc_3k_hierarchy.R)
