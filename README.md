@@ -7,7 +7,7 @@ To construct the hierarchy in our proposed method, run pbmc_3k_hierarchy.R
 
 To generate the compact heatmap based on the hierarchy, run Generate_compact_heatmap.R(This file should be run after constructing the hierarchy, which means it should be run after running pbmc_3k_hierarchy.R or with an predefined hierarchy organized in a proper data structure)
 
-### Notes:
+### Notes for the alternative faster implementation:
 we provided an alternative faster implementation with predefined hierarchical lineages(pbmc_3k_hierarchy_fast.R). In datasets where the number of clusters or cell types is small, users can choose the original implementation. In cases where there are many cell types, users can choose the faster implementation.
 
 In this alternative faster implementation, the predefined hierarchical lineage tree is computed by BuildClusterTree() function in Seurat. 
